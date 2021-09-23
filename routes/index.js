@@ -1,6 +1,8 @@
 var express = require('express');
 var router = express.Router();
 var userModel = require('../bdd/user')
+var request = require('sync-request');
+
 
 
 // Route sign-up ↓↓↓
@@ -58,6 +60,21 @@ router.post('/sign-in', async function(req, res, next) {
   }
 
   res.json({ user, error, result });
+});
+
+// Route get sources ↓↓↓
+router.get('/get-sources', async function(req, res, next) {
+  console.log("route get-sources")
+
+  var requete = request("GET", 'https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
+
+  var sources = JSON.parse(requete.body);
+  
+  console.log("sources",sources)
+
+  
+  
+  res.json({ sources });
 });
 
 module.exports = router;

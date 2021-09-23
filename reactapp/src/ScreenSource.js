@@ -13,13 +13,15 @@ function ScreenSource() {
 
   useEffect(() => {
     async function loadData() {
-    var sources = await fetch('https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
-    // var test = await fetch('/boo');
-    // test = await test.json()
-    // console.log('test', test)
-    sources = await sources.json();
-    console.log(sources);
-    setSourceList(sources);
+    // var sources = await fetch('https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
+    // sources = await sources.json();
+    // console.log(sources);
+    var data = await fetch('/get-sources');
+    data = await data.json()
+    // console.log('data', data.sources.sources)
+    
+ 
+    setSourceList(data.sources);
     }
     loadData()
     },[])
