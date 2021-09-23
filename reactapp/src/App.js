@@ -9,13 +9,13 @@ import ScreenArticlesBySource from './ScreenArticlesBySource';
 function App() {
   return (
     <Router>
-    <Switch>
-      <Route exact path="/" component={ScreenHome} />
-      <Route path="/screensource" component={ScreenSource}  />
-      <Route path="/screenarticlesbysource/:id" component={ScreenArticlesBySource}  />
-      <Route path="/screenmyarticles" component={ScreenMyArticles}  />
-    </Switch>
-  </Router>
+      <Switch>
+        <Route exact path="/" component={ScreenHome} />
+        <Route path="/screensource" component={ScreenSource}  />
+        <Route path="/screenarticlesbysource/:id" component={ScreenArticlesBySource}  />
+        <Route path="/screenmyarticles" component={ScreenMyArticles}  />
+      </Switch>
+    </Router>
   );
   
 }
