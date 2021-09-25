@@ -21,16 +21,21 @@ function ScreenArticlesBySource(props) {
 
   useEffect(() => {
     async function loadData() {
-      console.log('id', id)
-    var data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=e515a8b211364216a98fced7350dd278`);
-    data = await data.json();
-    console.log(data);
-    setArticles(data.articles);
+
+    var data2 = await fetch(`/get-articles-by-source?id=${id}`);
+    data2 = await data2.json()
+    // console.log('data2', data2)
+
+    // console.log('id', id)
+    // var data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=e515a8b211364216a98fced7350dd278`);
+    // data = await data.json();
+    // console.log(data);
+    setArticles(data2.articles.articles);
     }
     loadData()
     },[id])
 
-console.log(articles)
+// console.log("etat article",articles)
 
     // Les fonctions ↓↓↓
 

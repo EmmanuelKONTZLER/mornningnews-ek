@@ -67,14 +67,24 @@ router.get('/get-sources', async function(req, res, next) {
   console.log("route get-sources")
 
   var requete = request("GET", 'https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
-
   var sources = JSON.parse(requete.body);
   
-  console.log("sources",sources)
-
-  
+  console.log("sources",sources) 
   
   res.json({ sources });
+});
+
+// Route get articles by source ↓↓↓
+router.get('/get-articles-by-source', async function(req, res, next) {
+  console.log("route get-articles-by-source", req.query)
+  var id = req.query.id
+
+  var requete = request("GET", `https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=e515a8b211364216a98fced7350dd278`);
+  var articles = JSON.parse(requete.body);
+  // var articles = []
+  console.log("articles",articles) 
+  
+  res.json({ articles });
 });
 
 module.exports = router;
