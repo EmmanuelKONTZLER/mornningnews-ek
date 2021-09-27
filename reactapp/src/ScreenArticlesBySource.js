@@ -4,6 +4,7 @@ import { Card, Icon, Modal, Button} from 'antd';
 import Nav from './Nav'
 import { useParams } from "react-router-dom";
 import { Container, Row, Col } from 'reactstrap';
+import {connect} from 'react-redux';
 
 const { Meta } = Card;
 
@@ -75,7 +76,7 @@ function ScreenArticlesBySource(props) {
         }
         actions={[
             <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title, article.content)}></Icon>,
-            <Icon type="like" key="ellipsis"/>
+            <Icon type="like" key="ellipsis" onClick={() => props.articleOnWishlist(article.title, article.content, article.description, article.urlToImage)}/>
         ]}
         >
         <Meta
@@ -104,4 +105,15 @@ function ScreenArticlesBySource(props) {
   );
 }
 
-export default ScreenArticlesBySource;
+function mapDispatchToProps(dispatch) {
+  return {
+    articleOnWishlist: function(title, content, description, image) {
+    dispatch( {type: 'addArticle', title: title, content: content, description: description, image: image } )
+    }
+  }
+}
+  
+export default connect(
+null,
+mapDispatchToProps
+)(ScreenArticlesBySource);
