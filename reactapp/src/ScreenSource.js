@@ -2,17 +2,20 @@ import React,{useEffect, useState} from 'react';
 import './App.css';
 import { List, Avatar} from 'antd';
 import Nav from './Nav'
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import {connect} from 'react-redux';
 
 // https://newsapi.org/docs/endpoints/sources
 
-function ScreenSource() {
+function ScreenSource(props) {
 
   const [sourceList, setSourceList] = useState([]);
+  const [token, setToken] = useState("")
 
-
+  console.log("token", props.token)
   useEffect(() => {
     async function loadData() {
+  
     // var sources = await fetch('https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
     // sources = await sources.json();
     // console.log(sources);
@@ -26,7 +29,14 @@ function ScreenSource() {
     loadData()
     },[])
 
-    console.log('02', sourceList.sources)
+    console.log('token in screensource', props.token)
+
+    if (!props.token) {
+      return(
+        <Redirect to='/' />
+      )
+    }
+  
 
   return (
     <div>
@@ -50,12 +60,19 @@ function ScreenSource() {
                     </List.Item>
                   )}
                 />
-
-
-          </div>
-                 
+          </div>                 
       </div>
   );
 }
 
-export default ScreenSource;
+
+
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
+  
+export default connect(
+  mapStateToProps,
+  null
+)(ScreenSource);
