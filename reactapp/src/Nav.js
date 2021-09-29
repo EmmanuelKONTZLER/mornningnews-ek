@@ -2,8 +2,9 @@ import React from 'react';
 import './App.css';
 import {Menu, Icon} from 'antd'
 import {Link} from 'react-router-dom';
+import {connect} from 'react-redux'
 
-function Nav() {
+function Nav(props) {
 
   return (
     <nav >
@@ -21,10 +22,10 @@ function Nav() {
           <Link to="/screenmyarticles" ></Link>
         </Menu.Item>
 
-        <Menu.Item key="app">
-          <Icon type="logout" />
+        <Menu.Item key="app" onClick={() => props.addToken("")} >
+          <Icon type="logout"/>
           Logout
-          <Link to="/" ></Link>
+          {/* <Link to="/" ></Link> */}
         </Menu.Item>
 
       </Menu>
@@ -32,4 +33,16 @@ function Nav() {
   );
 }
 
-export default Nav;
+
+function mapDispatchToProps(dispatch){
+  return {
+    addToken: function(token){
+      dispatch({type: 'addToken', token: token})
+    }
+  }
+}
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(Nav)

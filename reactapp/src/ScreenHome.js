@@ -15,7 +15,7 @@ function ScreenHome(props) {
   const [signinPassword, setSigninPassword] = useState('');
   const [signinError, setSigninError] = useState([]);
   const [signinResult, setSigninResult] = useState(false);
-  const [userToken, setUserToken] = useState('pouet');
+  const [userToken, setUserToken] = useState('');
 
   // Fonctions ↓↓↓
 

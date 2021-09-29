@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 import { Card, Icon, Modal, Button} from 'antd';
 import Nav from './Nav'
-import { useParams } from "react-router-dom";
+import { useParams, Redirect } from "react-router-dom";
 import { Container, Row, Col } from 'reactstrap';
 import {connect} from 'react-redux';
+
 
 const { Meta } = Card;
 
@@ -91,6 +92,12 @@ function ScreenArticlesBySource(props) {
     )
   })
 
+  if (!props.token) {
+    return(
+      <Redirect to='/' />
+    )
+  }
+
   return (
     <div>         
       <Nav/>
@@ -105,6 +112,10 @@ function ScreenArticlesBySource(props) {
   );
 }
 
+function mapStateToProps(state) {
+  return { token: state.token }
+}
+
 function mapDispatchToProps(dispatch) {
   return {
     articleOnWishlist: function(title, content, description, image) {
@@ -114,6 +125,6 @@ function mapDispatchToProps(dispatch) {
 }
   
 export default connect(
-null,
+mapStateToProps,
 mapDispatchToProps
 )(ScreenArticlesBySource);

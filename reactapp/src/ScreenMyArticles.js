@@ -3,6 +3,7 @@ import './App.css';
 import { Card, Icon, Modal} from 'antd';
 import Nav from './Nav'
 import {connect} from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 const { Meta } = Card;
 
@@ -64,7 +65,11 @@ function ScreenMyArticles(props) {
       )
     })
   }
-
+  if (!props.token) {
+    return(
+      <Redirect to='/' />
+    )
+  }
 
 
   return (
@@ -83,7 +88,7 @@ function ScreenMyArticles(props) {
 
 
 function mapStateToProps(state) {
-  return { articles: state.articles }
+  return { articles: state.articles, token: state.token }
 }
 
 function mapDispatchToProps(dispatch) {
