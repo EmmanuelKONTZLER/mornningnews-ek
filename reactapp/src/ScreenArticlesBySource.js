@@ -54,6 +54,16 @@ function ScreenArticlesBySource(props) {
     const handleCancel = () => {
       setIsModalVisible(false);
     };
+
+    var addOnWishlist = async (title, content, description, urlToImage) => {
+      props.articleOnWishlist(title, content, description, urlToImage)
+      var newArticle = await fetch('/add-on-wishlist', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `token=${props.token}&title=${title}&content=${content}&description=${description}&urlToImage=${urlToImage}`
+      });
+      newArticle = await newArticle.json();
+    }
   
 
   // Boucle ↓↓↓
@@ -77,7 +87,7 @@ function ScreenArticlesBySource(props) {
         }
         actions={[
             <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title, article.content)}></Icon>,
-            <Icon type="like" key="ellipsis" onClick={() => props.articleOnWishlist(article.title, article.content, article.description, article.urlToImage)}/>
+            <Icon type="like" key="ellipsis" onClick={() => addOnWishlist(article.title, article.content, article.description, article.urlToImage)}/>
         ]}
         >
         <Meta

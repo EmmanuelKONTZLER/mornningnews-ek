@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import './App.css';
 import { Card, Icon, Modal} from 'antd';
 import Nav from './Nav'
@@ -14,6 +14,21 @@ function ScreenMyArticles(props) {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+  const [articles, setArticles] = useState([])
+
+  // UseEffect
+
+  useEffect(() => {
+    async function loadData() {
+
+    var data = await fetch(`/get-articles-in-wishlist?token=${props.token}`);
+    data = await data.json()
+    console.log(data)
+
+    setArticles(data.articles);
+    }
+    loadData()
+    },[])
 
   // Les fonctions ↓↓↓
 
@@ -31,11 +46,11 @@ function ScreenMyArticles(props) {
     setIsModalVisible(false);
   };
 
-  if(props.articles.length == 0) {
+  if(articles.length == 0) {
     var articleList = <div style={{marginTop: "15px", color: "red" }}>No article liked</div>
   } else {     
-
-    var articleList = props.articles.map((article, i) => {
+    console.log('123', articles)
+    var articleList = articles.map((article, i) => {
       return(
         <div key={i} style={{display:'flex',justifyContent:'center'}}>
                     <Card
@@ -48,7 +63,7 @@ function ScreenMyArticles(props) {
                       cover={
                       <img
                           alt="example"
-                          src={article.image}
+                          src={article.urlToImage}
                       />                        
                       }                        
                       actions={[
