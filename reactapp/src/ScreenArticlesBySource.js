@@ -56,7 +56,7 @@ function ScreenArticlesBySource(props) {
     };
 
     var addOnWishlist = async (title, content, description, urlToImage) => {
-      props.articleOnWishlist(title, content, description, urlToImage)
+      // props.articleOnWishlist(title, content, description, urlToImage)
       var newArticle = await fetch('/add-on-wishlist', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
@@ -126,15 +126,15 @@ function mapStateToProps(state) {
   return { token: state.token }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    articleOnWishlist: function(title, content, description, image) {
-    dispatch( {type: 'addArticle', title: title, content: content, description: description, image: image } )
-    }
-  }
-}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     articleOnWishlist: function(title, content, description, image) {
+//     dispatch( {type: 'addArticle', title: title, content: content, description: description, image: image } )
+//     }
+//   }
+// }
   
 export default connect(
 mapStateToProps,
-mapDispatchToProps
+// mapDispatchToProps
 )(ScreenArticlesBySource);

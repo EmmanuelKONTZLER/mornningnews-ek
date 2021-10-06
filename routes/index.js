@@ -37,8 +37,12 @@ router.post('/sign-up', async function(req, res, next) {
   
     user = await user.save()
   }
-
+if(result) {
   res.json({ token: user.token, error, result });
+} else {
+  res.json({ error, result });
+}
+
 });
 
 // Route sign-in ↓↓↓
@@ -105,22 +109,43 @@ router.get('/get-articles-by-source', async function(req, res, next) {
 // Route add article on wishlist ↓↓↓
 router.post('/add-on-wishlist', async function(req, res, next) {
  
-  var articles = await articleModel.find({title: req.body.title})
+  var articles = await articleModel.findOne({title: req.body.title})
+  console.log('addarticle',articles)
   var user = await userModel.findOne({token: req.body.token})
-  if (articles.length == 0) {
+  console.log('adduser', user)
+  // si l'article n'est pas enregistré:
+  // - je l'enregistre en bdd, 
+  // - j'enregistre l'id de l'user en clé etrangère et,
+  // - l'id de l'article en clé étrangère dans la collection users
+  if (!articles) {
     var article = new articleModel({
       title: req.body.title,
       content: req.body.content,
       description: req.body.description,
       urlToImage: req.body.urlToImage
       })
+      article.users.push(user._id)
       article = await article.save()
       user.articles.push(article._id)
       user = await user.save()
   } else {
-    if (user.articles.filter(e => e == articles[0].id).length == 0)
-    user.articles.push(articles[0].id)
+  // si l'article est déjà enregistré en bdd :
+  // - je vérifie si il n'est pas déjà enregistré dans la collection users, le cas échéant :
+    // - j'enregistre l'id de l'user en clé etrangère de la collection articles et,
+    // - l'id de l'article en clé étrangère dans la collection users
+    if (user.articles.filter(e => e == articles.id).length == 0) {
+      
+    user.articles.push(articles.id);
     user = await user.save()
+    
+    }
+
+    if (articles.users.filter(e => e == user._id).length == 0) {
+      console.log(111, articles.users)
+    articles.users.push(user._id);
+      console.log(222, articles.users)
+    articles = await articles.save();
+    }
   } 
 
   res.json({ result: "success" });
@@ -138,5 +163,40 @@ router.get('/get-articles-in-wishlist', async function(req, res, next) {
   
   res.json({ articles: user[0].articles});
 });
+
+// Route delete article from wishlist
+router.delete('/delete-article', async function(req, res, next) {
+  console.log("route delete article", req.query)
+  var article = await articleModel.findById(req.query.id);
+  console.log('article1', article)
+  var user = await userModel.findOne({token: req.query.token});
+  console.log('user', user)
+ 
+  // Suppression de l'user dans le document article
+  article.users = article.users.filter(e => e != user.id);
+  article = await article.save();
+
+  // Suppression de l'article dans le document user
+   user.articles = user.articles.filter(e => e != article.id);
+   console.log("123", user.articles);
+   user = await user.save();
+
+  // si l'article n'est plus liké, suppression de l'article de la BDD
+  if (article.users.length == 0) {
+    console.log('articlea', article)
+    article = await articleModel.deleteOne({_id:req.query.id})
+    console.log('articleb', article)
+  }
+  console.log('article2', article)
+  console.log('user2', user)
+  
+  var user = await userModel.find({token: req.query.token})
+  .populate("articles")
+  .exec()
+  
+  res.json({ articles: user[0].articles});
+});
+
+
 
 module.exports = router;

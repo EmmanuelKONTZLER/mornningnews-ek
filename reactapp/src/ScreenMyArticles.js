@@ -46,6 +46,17 @@ function ScreenMyArticles(props) {
     setIsModalVisible(false);
   };
 
+  
+  var deleteArticle = async (article) => {
+    // props.deteleArticle(article)
+    var data = await fetch(`/delete-article?token=${props.token}&id=${article}`,{
+    method: 'DELETE'});
+    data = await data.json()
+    console.log(data)
+    setArticles(data.articles)
+  }
+
+
   if(articles.length == 0) {
     var articleList = <div style={{marginTop: "15px", color: "red" }}>No article liked</div>
   } else {     
@@ -68,7 +79,7 @@ function ScreenMyArticles(props) {
                       }                        
                       actions={[
                         <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title, article.content)}/>,
-                        <Icon type="delete" key="ellipsis" onClick={() => props.deteleArticle(article.title,)} />
+                        <Icon type="delete" key="ellipsis" onClick={() => deleteArticle(article._id)} />
                       ]}
                       >                          
                       <Meta
@@ -80,6 +91,7 @@ function ScreenMyArticles(props) {
       )
     })
   }
+
   if (!props.token) {
     return(
       <Redirect to='/' />
@@ -103,18 +115,20 @@ function ScreenMyArticles(props) {
 
 
 function mapStateToProps(state) {
-  return { articles: state.articles, token: state.token }
+  return { 
+    // articles: state.articles, 
+    token: state.token }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    deteleArticle: function(title) {
-    dispatch( {type: 'deleteArticle', title: title} )
-    }
-  }
-}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     deteleArticle: function(title) {
+//     dispatch( {type: 'deleteArticle', title: title} )
+//     }
+//   }
+// }
   
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  null
 )(ScreenMyArticles);
