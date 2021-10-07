@@ -5,6 +5,7 @@ var articleModel = require('../bdd/article')
 var request = require('sync-request');
 var bcrypt = require('bcrypt');
 var uid2 = require("uid2")
+var apiKey = process.env.APIKEY
 
 
 // Route sign-up ↓↓↓
@@ -84,8 +85,7 @@ router.post('/sign-in', async function(req, res, next) {
 // Route get sources ↓↓↓
 router.get('/get-sources', async function(req, res, next) {
   console.log("route get-sources", req.query.language)
-
-  var requete = request("GET", `https://newsapi.org/v2/top-headlines/sources?&country=${req.query.country}&language=${req.query.language}&apiKey=e515a8b211364216a98fced7350dd278`);
+  var requete = request("GET", `https://newsapi.org/v2/top-headlines/sources?&country=${req.query.country}&language=${req.query.language}&apiKey=${apiKey}`);
   var sources = JSON.parse(requete.body);
   
   console.log("sources",sources) 
@@ -98,7 +98,7 @@ router.get('/get-articles-by-source', async function(req, res, next) {
   console.log("route get-articles-by-source", req.query)
   var id = req.query.id
 
-  var requete = request("GET", `https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=e515a8b211364216a98fced7350dd278`);
+  var requete = request("GET", `https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=${apiKey}`);
   var articles = JSON.parse(requete.body);
   // var articles = []
   console.log("articles",articles) 

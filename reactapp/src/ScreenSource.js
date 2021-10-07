@@ -11,8 +11,8 @@ function ScreenSource(props) {
 
   const [sourceList, setSourceList] = useState([]);
   const [token, setToken] = useState("")
-  const [language, setLanguage] = useState ("en")
-  const [country, setCountry] = useState("gb")
+  const [language, setLanguage] = useState ("fr")
+  const [country, setCountry] = useState("fr")
 
   console.log("token", props.token)
   useEffect(() => {
