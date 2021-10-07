@@ -5,6 +5,7 @@ name:String,
 email:String,
 hash:String,
 token:String,
+language: String,
 articles: [{type: mongoose.Schema.Types.ObjectId, ref: 'articles'}],
 });
 

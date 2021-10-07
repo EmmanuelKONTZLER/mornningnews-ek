@@ -31,6 +31,7 @@ router.post('/sign-up', async function(req, res, next) {
     var user = new userModel({
     name: req.body.name,
     email: req.body.email,
+    language: "fr",
     hash: hash,
     token: uid2(32)
     })
@@ -82,9 +83,9 @@ router.post('/sign-in', async function(req, res, next) {
 
 // Route get sources ↓↓↓
 router.get('/get-sources', async function(req, res, next) {
-  console.log("route get-sources")
+  console.log("route get-sources", req.query.language)
 
-  var requete = request("GET", 'https://newsapi.org/v2/top-headlines/sources?&country=fr&language=fr&apiKey=e515a8b211364216a98fced7350dd278');
+  var requete = request("GET", `https://newsapi.org/v2/top-headlines/sources?&country=${req.query.country}&language=${req.query.language}&apiKey=e515a8b211364216a98fced7350dd278`);
   var sources = JSON.parse(requete.body);
   
   console.log("sources",sources) 
@@ -115,36 +116,27 @@ router.post('/add-on-wishlist', async function(req, res, next) {
   console.log('adduser', user)
   // si l'article n'est pas enregistré:
   // - je l'enregistre en bdd, 
-  // - j'enregistre l'id de l'user en clé etrangère et,
-  // - l'id de l'article en clé étrangère dans la collection users
+  // - j'enregistre l'id de l'article en clé étrangère dans la collection users
   if (!articles) {
+    console.log(`l'article n'est pas dans la BDD`)
     var article = new articleModel({
       title: req.body.title,
       content: req.body.content,
       description: req.body.description,
       urlToImage: req.body.urlToImage
       })
-      article.users.push(user._id)
-      article = await article.save()
+      article = await article.save();
       user.articles.push(article._id)
       user = await user.save()
   } else {
+    console.log(`l'article est déjà dans la BDD`)
   // si l'article est déjà enregistré en bdd :
   // - je vérifie si il n'est pas déjà enregistré dans la collection users, le cas échéant :
-    // - j'enregistre l'id de l'user en clé etrangère de la collection articles et,
-    // - l'id de l'article en clé étrangère dans la collection users
+    // - j'enregistre l'id de l'article en clé étrangère dans la collection users
     if (user.articles.filter(e => e == articles.id).length == 0) {
-      
-    user.articles.push(articles.id);
-    user = await user.save()
-    
-    }
-
-    if (articles.users.filter(e => e == user._id).length == 0) {
-      console.log(111, articles.users)
-    articles.users.push(user._id);
-      console.log(222, articles.users)
-    articles = await articles.save();
+      console.log(`l'article n'est pas dans la wishlist de l'user`)
+      user.articles.push(articles.id);
+      user = await user.save()
     }
   } 
 
@@ -172,25 +164,18 @@ router.delete('/delete-article', async function(req, res, next) {
   var user = await userModel.findOne({token: req.query.token});
   console.log('user', user)
  
-  // Suppression de l'user dans le document article
-  article.users = article.users.filter(e => e != user.id);
-  article = await article.save();
-
   // Suppression de l'article dans le document user
    user.articles = user.articles.filter(e => e != article.id);
    console.log("123", user.articles);
    user = await user.save();
 
   // si l'article n'est plus liké, suppression de l'article de la BDD
-  if (article.users.length == 0) {
-    console.log('articlea', article)
-    article = await articleModel.deleteOne({_id:req.query.id})
-    console.log('articleb', article)
-  }
-  console.log('article2', article)
-  console.log('user2', user)
+    var data = await userModel.find({articles: { "$in":  req.query.id  }})
+    if (data.length == 0) {
+      article = await articleModel.deleteOne({_id:req.query.id})
+    }
   
-  var user = await userModel.find({token: req.query.token})
+  user = await userModel.find({token: req.query.token})
   .populate("articles")
   .exec()
   
