@@ -4,14 +4,9 @@ var userModel = require('../bdd/user')
 var bcrypt = require('bcrypt');
 var uid2 = require("uid2")
 
-/* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send('respond with a resource');
-});
 
 // Route sign-up ↓↓↓
 router.post('/sign-up', async function(req, res, next) {
-  console.log("route sign-up")
 
   var error = []
   var result = false
@@ -40,37 +35,31 @@ router.post('/sign-up', async function(req, res, next) {
   
     user = await user.save()
   }
-if(result) {
-  res.json({ token: user.token, error, result });
-} else {
-  res.json({ error, result });
-}
+  if(result) {
+    res.json({ token: user.token, error, result });
+  } else {
+    res.json({ error, result });
+  }
 
 });
 
 // Route sign-in ↓↓↓
 router.post('/sign-in', async function(req, res, next) {
-  console.log("route sign-in", req.body)
-
+  
   var error = []
   var result = false
 
   var user = await userModel.find({email: req.body.email})
-  console.log('signin user', user[0])
- 
+   
   if (req.body.email == "" || req.body.password == "") {
-    console.log("check1")
     error.push("Merci de renseigner tous les champs");
     user = []
   } else if (user[0] == undefined) {
-    console.log("check2")
     error.push("Votre email est inconnu");
   } else if (!bcrypt.compareSync(req.body.password, user[0].hash)) {
-    console.log("check3")
     error.push("Vos identifiants sont incorrects");
     user = []
   } else {
-    console.log("check4")
     result = true
   }
 
@@ -79,7 +68,6 @@ router.post('/sign-in', async function(req, res, next) {
   } else {
     res.json({ token: user[0].token, error, result });
   }
-
   
 });
 

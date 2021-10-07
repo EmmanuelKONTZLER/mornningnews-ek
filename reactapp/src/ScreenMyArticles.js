@@ -9,28 +9,20 @@ const { Meta } = Card;
 
 function ScreenMyArticles(props) {
 
-  // Variables et états ↓↓↓
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
   const [articles, setArticles] = useState([])
 
-  // UseEffect
-
   useEffect(() => {
     async function loadData() {
 
-    var data = await fetch(`/get-articles-in-wishlist?token=${props.token}`);
-    data = await data.json()
-    console.log(data)
-
-    setArticles(data.articles);
+      var data = await fetch(`/get-articles-in-wishlist?token=${props.token}`);
+      data = await data.json()
+      setArticles(data.articles);
     }
     loadData()
-    },[])
-
-  // Les fonctions ↓↓↓
+  },[])
 
   const showModal = (title, content) => {
     setIsModalVisible(true);
@@ -48,11 +40,10 @@ function ScreenMyArticles(props) {
 
   
   var deleteArticle = async (article) => {
-    // props.deteleArticle(article)
+
     var data = await fetch(`/delete-article?token=${props.token}&id=${article}`,{
     method: 'DELETE'});
     data = await data.json()
-    console.log(data)
     setArticles(data.articles)
   }
 
@@ -60,34 +51,33 @@ function ScreenMyArticles(props) {
   if(articles.length == 0) {
     var articleList = <div style={{marginTop: "15px", color: "red" }}>No article liked</div>
   } else {     
-    console.log('123', articles)
     var articleList = articles.map((article, i) => {
       return(
         <div key={i} style={{display:'flex',justifyContent:'center'}}>
-                    <Card
-                      style={{  
-                        width: 300, 
-                        margin:'15px', 
-                        display:'flex',
-                        flexDirection: 'column',
-                        justifyContent:'space-between' }}
-                      cover={
-                      <img
-                          alt="example"
-                          src={article.urlToImage}
-                      />                        
-                      }                        
-                      actions={[
-                        <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title, article.content)}/>,
-                        <Icon type="delete" key="ellipsis" onClick={() => deleteArticle(article._id)} />
-                      ]}
-                      >                          
-                      <Meta
-                        title={article.title}
-                        description={article.description}
-                      />                  
-                    </Card>
-                  </div>
+          <Card
+            style={{  
+              width: 300, 
+              margin:'15px', 
+              display:'flex',
+              flexDirection: 'column',
+              justifyContent:'space-between' }}
+            cover={
+            <img
+                alt="example"
+                src={article.urlToImage}
+            />                        
+            }                        
+            actions={[
+              <Icon type="read" key="ellipsis2" onClick={() => showModal(article.title, article.content)}/>,
+              <Icon type="delete" key="ellipsis" onClick={() => deleteArticle(article._id)} />
+            ]}
+            >                          
+            <Meta
+              title={article.title}
+              description={article.description}
+            />                  
+          </Card>
+        </div>
       )
     })
   }
@@ -116,17 +106,8 @@ function ScreenMyArticles(props) {
 
 function mapStateToProps(state) {
   return { 
-    // articles: state.articles, 
     token: state.token }
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     deteleArticle: function(title) {
-//     dispatch( {type: 'deleteArticle', title: title} )
-//     }
-//   }
-// }
   
 export default connect(
   mapStateToProps,

@@ -1,17 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Card, Icon, Modal, Button} from 'antd';
+import { Card, Icon, Modal } from 'antd';
 import Nav from './Nav'
 import { useParams, Redirect } from "react-router-dom";
-import { Container, Row, Col } from 'reactstrap';
 import {connect} from 'react-redux';
-
 
 const { Meta } = Card;
 
 function ScreenArticlesBySource(props) {
-
-  // Variables et états ↓↓↓
 
   var { id } = useParams();
   const [articles, setArticles] = useState([])
@@ -19,27 +15,15 @@ function ScreenArticlesBySource(props) {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
 
-  // Hook d'éffet ↓↓↓
 
   useEffect(() => {
     async function loadData() {
-
-    var data2 = await fetch(`/get-articles-by-source?id=${id}`);
-    data2 = await data2.json()
-    // console.log('data2', data2)
-
-    // console.log('id', id)
-    // var data = await fetch(`https://newsapi.org/v2/top-headlines?sources=${id}&apiKey=e515a8b211364216a98fced7350dd278`);
-    // data = await data.json();
-    // console.log(data);
-    setArticles(data2.articles.articles);
+      var data2 = await fetch(`/get-articles-by-source?id=${id}`);
+      data2 = await data2.json()
+      setArticles(data2.articles.articles);
     }
     loadData()
-    },[id])
-
-// console.log("etat article",articles)
-
-    // Les fonctions ↓↓↓
+  },[id])
 
     const showModal = (title, content) => {
       setIsModalVisible(true);
@@ -56,7 +40,6 @@ function ScreenArticlesBySource(props) {
     };
 
     var addOnWishlist = async (title, content, description, urlToImage) => {
-      // props.articleOnWishlist(title, content, description, urlToImage)
       var newArticle = await fetch('/add-on-wishlist', {
         method: 'POST',
         headers: {'Content-Type':'application/x-www-form-urlencoded'},
@@ -65,9 +48,6 @@ function ScreenArticlesBySource(props) {
       newArticle = await newArticle.json();
     }
   
-
-  // Boucle ↓↓↓
-
   var articleList = articles.map((article, i)=>{
 
     return(
@@ -94,10 +74,7 @@ function ScreenArticlesBySource(props) {
           title={article.title}
           description={article.description}
         />
-
       </Card>
-
-
     </div>
     )
   })
@@ -125,16 +102,8 @@ function ScreenArticlesBySource(props) {
 function mapStateToProps(state) {
   return { token: state.token }
 }
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     articleOnWishlist: function(title, content, description, image) {
-//     dispatch( {type: 'addArticle', title: title, content: content, description: description, image: image } )
-//     }
-//   }
-// }
   
 export default connect(
 mapStateToProps,
-// mapDispatchToProps
+null
 )(ScreenArticlesBySource);

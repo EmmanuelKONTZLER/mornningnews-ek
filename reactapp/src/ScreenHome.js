@@ -29,7 +29,6 @@ function ScreenHome(props) {
     setUserToken(newUser.token);
     setSignupError(newUser.error);
     setSignupResult(newUser.result);
-
   }
 
   var signin = async (signinEmail, signinPassword) => {    
@@ -39,17 +38,12 @@ function ScreenHome(props) {
       body: `email=${signinEmail}&password=${signinPassword}`
     });
     user = await user.json()
-    console.log("user.token", user.token)
     setUserToken(user.token)
     setSigninError(user.error)
-    setSigninResult(user.result)
- 
+    setSigninResult(user.result) 
   }
 
-  console.log("token in state", userToken, signinResult)
-
   if (signinResult || signupResult) {
-    console.log("token before redux", userToken)
     props.addToken(userToken)
     return (
       <Redirect to='/screensource' />
