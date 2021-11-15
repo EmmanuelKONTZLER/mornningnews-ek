@@ -63,14 +63,14 @@ function ScreenHome(props) {
            <div className="Sign">
                   
                   <Input 
-                  className="Login-input" 
+                  className="Login-input width80" 
                   placeholder="arthur@lacapsule.com"
                   onChange={(e) => setSigninEmail(e.target.value)}
                   value={signinEmail}
                   />
       
                   <Input.Password 
-                  className="Login-input" 
+                  className="Login-input width80" 
                   placeholder="password"
                   onChange={(e) => setSigninPassword(e.target.value)}
                   value={signinPassword}
@@ -100,21 +100,21 @@ function ScreenHome(props) {
                     <div className="Sign">
                   
                   <Input 
-                  className="Login-input"
+                  className="Login-input width80"
                   placeholder="Arthur G" 
                   onChange={(e) => setSignupName(e.target.value)}
                   value={signupName}
                   />
       
                   <Input 
-                  className="Login-input" 
+                  className="Login-input width80" 
                   placeholder="arthur@lacapsule.com"
                   onChange={(e) => setSignupEmail(e.target.value)}
                   value={signupEmail}
                   />
       
                   <Input.Password 
-                  className="Login-input" 
+                  className="Login-input width80" 
                   placeholder="password"
                   onChange={(e) => setSignupPassword(e.target.value)}
                   value={signupPassword}
