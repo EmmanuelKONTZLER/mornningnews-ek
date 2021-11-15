@@ -9,6 +9,7 @@ import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 // import articles from './reducer/articles';
 import token from './reducer/token';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const store = createStore(combineReducers({
   // articles,

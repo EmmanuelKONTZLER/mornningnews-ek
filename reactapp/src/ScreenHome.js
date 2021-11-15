@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import './App.css';
-import {Input,Button} from 'antd';
+import {Input,Button,} from 'antd';
 import {Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
+import { 
+  Container,  Row,  Col, } from 'reactstrap';
 
 function ScreenHome(props) {
 
@@ -53,86 +55,91 @@ function ScreenHome(props) {
 
   return (
     <div className="Login-page" >
+      <Container>
+      <Row>
+        <Col xs="12" lg="6" className="pad7">
+           {/* SIGN-IN */}
 
-          {/* SIGN-IN */}
-
-          <div className="Sign">
+           <div className="Sign">
                   
-            <Input 
-            className="Login-input" 
-            placeholder="arthur@lacapsule.com"
-            onChange={(e) => setSigninEmail(e.target.value)}
-            value={signinEmail}
-            />
+                  <Input 
+                  className="Login-input" 
+                  placeholder="arthur@lacapsule.com"
+                  onChange={(e) => setSigninEmail(e.target.value)}
+                  value={signinEmail}
+                  />
+      
+                  <Input.Password 
+                  className="Login-input" 
+                  placeholder="password"
+                  onChange={(e) => setSigninPassword(e.target.value)}
+                  value={signinPassword}
+                    />
+                  {signinError.length != 0 ?
+                    signinError.map((error, i) => {
+                      return (
+                        <p>{error}</p>
+                      )
+                    })
+                    :
+                    <></>
+                  }
+      
+                  <Button 
+                  onClick={()=> signin(signinEmail, signinPassword)} 
+                  style={{width:'80px'}} 
+                  type="primary">
+                    Sign-in
+                  </Button>
+      
+                </div>
+        </Col>
+        <Col xs="12" lg="6" className="pad7">
+                    {/* SIGN-UP */}
 
-            <Input.Password 
-            className="Login-input" 
-            placeholder="password"
-            onChange={(e) => setSigninPassword(e.target.value)}
-            value={signinPassword}
-              />
-            {signinError.length != 0 ?
-              signinError.map((error, i) => {
-                return (
-                  <p>{error}</p>
-                )
-              })
-              :
-              <></>
-            }
-
-            <Button 
-            onClick={()=> signin(signinEmail, signinPassword)} 
-            style={{width:'80px'}} 
-            type="primary">
-              Sign-in
-            </Button>
-
-          </div>
-
-          {/* SIGN-UP */}
-
-          <div className="Sign">
+                    <div className="Sign">
                   
-            <Input 
-            className="Login-input"
-            placeholder="Arthur G" 
-            onChange={(e) => setSignupName(e.target.value)}
-            value={signupName}
-            />
-
-            <Input 
-            className="Login-input" 
-            placeholder="arthur@lacapsule.com"
-            onChange={(e) => setSignupEmail(e.target.value)}
-            value={signupEmail}
-            />
-
-            <Input.Password 
-            className="Login-input" 
-            placeholder="password"
-            onChange={(e) => setSignupPassword(e.target.value)}
-            value={signupPassword}
-              />
-            {signupError.length != 0 ?
-              signupError.map((error, i) => {
-                return (
-                  <p>{error}</p>
-                )
-              })
-              :
-              <></>
-            }
-
-            <Button 
-            onClick={()=> signup(signupName, signupEmail, signupPassword)} 
-            style={{width:'80px'}} 
-            type="primary">
-              Sign-up
-            </Button>
-
-          </div>
-
+                  <Input 
+                  className="Login-input"
+                  placeholder="Arthur G" 
+                  onChange={(e) => setSignupName(e.target.value)}
+                  value={signupName}
+                  />
+      
+                  <Input 
+                  className="Login-input" 
+                  placeholder="arthur@lacapsule.com"
+                  onChange={(e) => setSignupEmail(e.target.value)}
+                  value={signupEmail}
+                  />
+      
+                  <Input.Password 
+                  className="Login-input" 
+                  placeholder="password"
+                  onChange={(e) => setSignupPassword(e.target.value)}
+                  value={signupPassword}
+                    />
+                  {signupError.length != 0 ?
+                    signupError.map((error, i) => {
+                      return (
+                        <p>{error}</p>
+                      )
+                    })
+                    :
+                    <></>
+                  }
+      
+                  <Button 
+                  onClick={()=> signup(signupName, signupEmail, signupPassword)} 
+                  style={{width:'80px'}} 
+                  type="primary">
+                    Sign-up
+                  </Button>
+      
+                </div>
+        </Col>
+      </Row>
+      </Container>
       </div>
   );
 }
